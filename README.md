@@ -3,7 +3,7 @@
 The script works without an internet connection after installing dependencies.
 
 ## Requirements
-* [Node.js](https://github.com/nodejs/node) (18.15.0+)
+* [Node.js](https://github.com/nodejs/node) (v26.12.1+)
 * [Npm](https://www.npmjs.com/package/npm)
 
 ## Install
