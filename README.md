@@ -22,3 +22,16 @@ npm run create
 ```bash
 npm run clean
 ```
+
+Credentials are written to `../wallet_credentials` relative to the current working
+directory. Running `npm run create` again replaces the existing wallet credentials.
+
+### Run Tests
+```bash
+npm test
+```
+
+### Audit Dependencies
+```bash
+npm audit
+```

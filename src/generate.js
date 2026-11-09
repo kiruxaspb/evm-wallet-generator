@@ -1,42 +1,33 @@
-const ethers = require('ethers');
-const fs = require('fs');
+const { Wallet } = require('ethers');
+const fs = require('node:fs');
+const path = require('node:path');
 
-const folderName = "wallet_credentials";
+const folder = path.resolve('..', 'wallet_credentials');
 
 function generate() {
-  let phrase = ethers.Wallet.createRandom().mnemonic.phrase;
-  let wallet = ethers.Wallet.fromPhrase(phrase);
+  const wallet = Wallet.createRandom();
 
-  console.log("Generated wallet address:", wallet.address);
+  fs.mkdirSync(folder, { recursive: true, mode: 0o700 });
+  const credentials = {
+    'address.txt': wallet.address,
+    'pkey.txt': wallet.privateKey,
+    'mnemonic.txt': wallet.mnemonic.phrase,
+  };
 
-  fs.stat(`../${folderName}`, function(err) {
-    if (!err) {
-      // console.log('Folder exists');
-      console.log('Credentials: cd ../wallet_credentials')
-      fs.writeFileSync(`../${folderName}/address.txt`, wallet.address, "ascii");
-      fs.writeFileSync(`../${folderName}/pkey.txt`, (wallet.privateKey).slice(2), "ascii"); // save w/o 0x
-      fs.writeFileSync(`../${folderName}/mnemonic.txt`, phrase, "ascii");
-      }
-      else if (err.code === 'ENOENT') {
-        fs.mkdir(`../${folderName}`, err => {
-          if(err) throw err;
-        });
-        fs.writeFileSync(`../${folderName}/address.txt`, wallet.address, "ascii");
-        fs.writeFileSync(`../${folderName}/pkey.txt`, (wallet.privateKey).slice(2), "ascii"); // save w/o 0x
-        fs.writeFileSync(`../${folderName}/mnemonic.txt`, phrase, "ascii");
-      }
-  });
-  /*
-  successString = "Wallet: " + wallet.address + "\n\nPrivate Key: " + (wallet.privateKey) + "\n\n12 word phrase: " + phrase;
-  fs.writeFileSync('./Success.txt', successString, (err) => {  
-    if (err) throw err; 
-  })
-  */
+  for (const [filename, value] of Object.entries(credentials)) {
+    fs.writeFileSync(path.join(folder, filename), value, {
+      encoding: 'ascii',
+      mode: 0o600,
+    });
+  }
+
+  console.log('Generated wallet address:', wallet.address);
+  console.log('Credentials:', folder);
 }
 
-async function main() {
+try {
   generate();
+} catch (error) {
+  console.error('Failed to generate wallet:', error.message);
+  process.exitCode = 1;
 }
-
-main();
-

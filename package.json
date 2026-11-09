@@ -4,19 +4,19 @@
   "description": "Script for generate wallet",
   "scripts": {
     "create": "node src/generate.js",
-    "clean": "node src/delete.js"
+    "clean": "node src/delete.js",
+    "test": "node --test"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/kiruxaspb/wallet-creator.git"
   },
-  "author": "kiruxaspb, contract us:https://www.linkedin.com/in/xdev/",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kiruxaspb/wallet-creator/issues"
   },
   "homepage": "https://github.com/kiruxaspb/Bwallet-creator#readme",
   "dependencies": {
-    "ethers": "^6.4.0"
+    "ethers": "^6.17.0"
   }
 }
