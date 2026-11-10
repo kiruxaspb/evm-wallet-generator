@@ -27,32 +27,50 @@ npm run clean
 Credentials are written to `../wallet_credentials` relative to the current working
 directory. Running `npm run create` again replaces the existing wallet credentials.
 
-### Вызов контракта и перевод ETH
+### Contract Calls and ETH Transfers
 
-В `scripts/call-contract.js` заполните `PRIVATE_KEY`, `RPC_URL` (Infura),
-`CONTRACT_ADDRESS`, `ABI` и замените `contract.setValue(123n)` на нужную функцию
-с аргументами. Пример рассчитан на функцию, отправляющую транзакцию;
-`view`/`pure` возвращают данные, а не хэш.
+In `scripts/call-contract.js`, set `PRIVATE_KEY`, `RPC_URL` (Infura),
+`CONTRACT_ADDRESS`, and `ABI`, then replace `contract.setValue(123n)` with
+the desired function and arguments. The example expects a function that sends
+a transaction; `view`/`pure` functions return data instead of a transaction hash.
 
 ```bash
 npm run contract
 ```
 
-В `scripts/send-eth.js` заполните `PRIVATE_KEY`, `RPC_URL`, `TO_ADDRESS`
-и `AMOUNT_ETH`. Например, `'0.001'` означает 0.001 ETH; сумму задавайте строкой
-с точкой, без суффикса `ETH`. Комиссия оплачивается сверх этой суммы.
+In `scripts/send-eth.js`, set `PRIVATE_KEY`, `RPC_URL`, `TO_ADDRESS`,
+and `AMOUNT_ETH`. For example, `'0.001'` means 0.001 ETH. Use a string with
+a decimal point and no `ETH` suffix. Transaction fees are paid on top of this amount.
 
 ```bash
 npm run send-eth
 ```
 
-Оба скрипта используют сеть из `RPC_URL` (в шаблоне — Mainnet) и выводят хэш
-после отправки. Для ожидания подтверждения раскомментируйте `tx.wait()`.
-Газ и комиссии рассчитывает ethers автоматически.
-Справочник: [ethers v6](https://docs.ethers.org/v6/single-page/).
+Both scripts use the network specified by `RPC_URL` (Mainnet in the template)
+and print the transaction hash after submission. Uncomment `tx.wait()` to wait
+for confirmation. Ethers estimates gas and fees automatically.
+Reference: [ethers v6](https://docs.ethers.org/v6/single-page/).
 
-`PRIVATE_KEY` и `RPC_URL` задаются прямо в начале каждого скрипта.
-Не коммитьте файлы с настоящим приватным ключом.
+Set `PRIVATE_KEY` and `RPC_URL` at the top of each script.
+Do not commit files containing a real private key.
+
+### Check the Deployer Address
+
+Set `SEED_PHRASE` and/or `PRIVATE_KEY` in `scripts/check-address.js`:
+
+```bash
+npm run check-address
+```
+
+The script derives the sender address locally for each input and checks whether
+the addresses match. No RPC connection is required, and no transactions are sent.
+The output is the wallet address that will send the deployment transaction when
+using that account, not the address of the future contract.
+
+The default seed derivation path is `m/44'/60'/0'/0/0` (the first account).
+If your deployment uses a different path or an additional BIP-39 passphrase,
+set the same `DERIVATION_PATH` and `SEED_PASSPHRASE` here.
+Do not commit the file with real secrets.
 
 ### Run Tests
 ```bash
