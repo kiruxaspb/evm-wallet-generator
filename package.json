@@ -7,6 +7,7 @@
     "clean": "node src/delete.js",
     "contract": "node scripts/call-contract.js",
     "send-eth": "node scripts/send-eth.js",
+    "check-address": "node scripts/check-address.js",
     "test": "node --test"
   },
   "repository": {
